@@ -37,9 +37,10 @@ PrivilegesRequired=admin
 WizardResizable=yes
 
 [Languages]
-Name: "chinese"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
-; 若你的 Inno Setup 版本只有 English，可改用下面这行：
-; Name: "english"; MessagesFile: "compiler:Default.isl"
+; 为兼容各种 Inno Setup 分发版，使用内置且一定存在的 Default.isl（英文界面）。
+; 若本地有 ChineseSimplified.isl，可取消下面注释并注释掉 english 行。
+Name: "english"; MessagesFile: "compiler:Default.isl"
+; Name: "chinese"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 
 [Files]
 ; 把 PyInstaller 产出的整个文件夹原样打进安装包
