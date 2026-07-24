@@ -27,6 +27,8 @@ jobs:
 
       - name: PyInstaller 打包（生成 dist/ZDQuote）
         run: python build_win.py
+        env:
+          PYTHONUTF8: 1
 
       - name: 用 Inno Setup 编译安装包（installer/ZDQuote_Setup.exe）
         shell: pwsh

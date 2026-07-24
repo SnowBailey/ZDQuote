@@ -8,10 +8,21 @@
 注：本脚本跨平台可解析，但 PyInstaller 不能交叉编译——
 必须在目标系统（Windows）上运行，才会产出 Windows 可执行文件。
 """
+import io
 import os
 import sys
 import subprocess
 import importlib.util
+
+# Windows 控制台默认 cp1252，中文打印会 UnicodeEncodeError；强制 UTF-8
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+try:
+    sys.stderr.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -34,6 +45,9 @@ def main():
         sys.exit(1)
 
     entry = os.path.join(HERE, "zd_app.py")
+    if not os.path.isfile(entry):
+        print(f"Error: missing entry file {entry}")
+        sys.exit(1)
     icon = os.path.join(HERE, "ZDQuote.ico")
     if not os.path.isfile(icon):
         print("缺少图标 ZDQuote.ico，先运行：python make_icon_win.py")
