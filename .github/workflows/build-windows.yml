@@ -1,0 +1,48 @@
+name: Build Windows Installer
+
+# 在微软免费 Windows runner 上构建 ZDQuote 安装包。
+# 触发：手动（Actions 页面 → Run workflow）或推到 main 分支。
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: PyInstaller 打包（生成 dist/ZDQuote）
+        run: python build_win.py
+
+      - name: 用 Inno Setup 编译安装包（installer/ZDQuote_Setup.exe）
+        uses: amancevice/innosetup-action@v1
+        with:
+          file: installer_win.iss
+
+      - name: 上传安装包产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZDQuote_Setup
+          path: installer/ZDQuote_Setup.exe
+          if-no-files-found: warn
+
+      - name: （兜底）同时上传可运行文件夹
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZDQuote_portable
+          path: dist/ZDQuote
+          if-no-files-found: ignore
