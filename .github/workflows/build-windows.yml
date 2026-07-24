@@ -40,6 +40,11 @@ jobs:
         shell: pwsh
         run: |
           choco install innosetup -y --no-progress
+          # 诊断：列出可用语言文件（下次若还语言报错可据此判断）
+          $langDir = "C:\Program Files (x86)\Inno Setup 6\Languages"
+          if (Test-Path $langDir) { Get-ChildItem $langDir | Select-Object Name }
+          $langDir2 = "C:\Program Files\Inno Setup 6\Languages"
+          if (Test-Path $langDir2) { Get-ChildItem $langDir2 | Select-Object Name }
           $iscc = Get-Command iscc -ErrorAction SilentlyContinue
           if (-not $iscc) {
             $exe = @(
