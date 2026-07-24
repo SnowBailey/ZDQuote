@@ -1,0 +1,13 @@
+# 构建产物（由 CI / 本地打包生成，不入库）
+dist/
+build/
+installer/
+__pycache__/
+*.pyc
+.DS_Store
+
+# 用户数据与运行时产物（含价格库等敏感信息，不入库）
+data/
+output/
+# PyInstaller 自动生成的 spec（本地构建产物）
+ZDQuote.spec
