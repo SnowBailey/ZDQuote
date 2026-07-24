@@ -30,10 +30,16 @@ jobs:
         env:
           PYTHONUTF8: 1
 
+      - name: 检查 PyInstaller 产物
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "dist\ZDQuote")) { throw "dist/ZDQuote not found" }
+          Get-ChildItem -Recurse -Path "dist\ZDQuote" | Select-Object -First 20
+
       - name: 用 Inno Setup 编译安装包（installer/ZDQuote_Setup.exe）
         shell: pwsh
         run: |
-          choco install innosetup -y
+          choco install innosetup -y --no-progress
           $iscc = Get-Command iscc -ErrorAction SilentlyContinue
           if (-not $iscc) {
             $exe = @(
@@ -41,10 +47,13 @@ jobs:
               "C:\Program Files\Inno Setup 6\ISCC.exe"
             ) | Where-Object { Test-Path $_ } | Select-Object -First 1
             if (-not $exe) { throw "ISCC not found" }
-            & $exe installer_win.iss
           } else {
-            & $iscc.Source installer_win.iss
+            $exe = $iscc.Source
           }
+          Write-Host "Using ISCC: $exe"
+          & $exe installer_win.iss
+          if (-not (Test-Path "installer\ZDQuote_Setup.exe")) { throw "ZDQuote_Setup.exe was not created" }
+          Get-Item "installer\ZDQuote_Setup.exe" | Select-Object Name, Length
 
       - name: 上传安装包产物
         uses: actions/upload-artifact@v4
