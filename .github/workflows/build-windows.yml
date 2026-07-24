@@ -29,9 +29,20 @@ jobs:
         run: python build_win.py
 
       - name: 用 Inno Setup 编译安装包（installer/ZDQuote_Setup.exe）
-        uses: amancevice/innosetup-action@v1
-        with:
-          file: installer_win.iss
+        shell: pwsh
+        run: |
+          choco install innosetup -y
+          $iscc = Get-Command iscc -ErrorAction SilentlyContinue
+          if (-not $iscc) {
+            $exe = @(
+              "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
+              "C:\Program Files\Inno Setup 6\ISCC.exe"
+            ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+            if (-not $exe) { throw "ISCC not found" }
+            & $exe installer_win.iss
+          } else {
+            & $iscc.Source installer_win.iss
+          }
 
       - name: 上传安装包产物
         uses: actions/upload-artifact@v4
