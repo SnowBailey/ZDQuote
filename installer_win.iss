@@ -13,7 +13,7 @@
 
 [Setup]
 ; 注：AppId 是卸载与升级的唯一标识，请勿随意更改
-AppId={{A1B2C3D4-E5F6-7890-ZDQU0TE2026WIN}
+AppId={{3CA513B9-97EF-45D6-8F94-164AE9874E9D}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
@@ -37,8 +37,8 @@ PrivilegesRequired=admin
 WizardResizable=yes
 
 [Languages]
-Name: "chinese"; MessagesFile: "compiler:Languages\Chinese.isl"
-; 若你的 Inno Setup 没有 Chinese.isl，可改用下面这行（英文界面）：
+Name: "chinese"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
+; 若你的 Inno Setup 版本只有 English，可改用下面这行：
 ; Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
